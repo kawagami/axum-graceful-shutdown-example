@@ -9,6 +9,8 @@ COPY Cargo.toml .
 
 RUN cargo build --target x86_64-unknown-linux-musl --release
 
+RUN strip -s /app/target/x86_64-unknown-linux-musl/release/testsomething
+
 # 修復 scratch 找不到檔案的問題
 # https://kerkour.com/rust-small-docker-image#from-scratch
 # 以上網址有說原因
