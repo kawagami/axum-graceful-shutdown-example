@@ -1,4 +1,4 @@
-FROM rust:1.69.0 AS builder
+FROM rust:1.74.0-slim-bookworm AS builder
 
 RUN rustup target add x86_64-unknown-linux-musl
 
