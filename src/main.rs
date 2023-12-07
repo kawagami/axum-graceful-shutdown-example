@@ -36,7 +36,7 @@ async fn main() {
 
     // Create a regular axum app.
     let app = Router::new()
-        .route("/slow", get(|| sleep(Duration::from_secs(5))))
+        .route("/slow", get(|| sleep(Duration::from_secs(2))))
         .route("/forever", get(std::future::pending::<()>))
         .layer((
             TraceLayer::new_for_http(),
