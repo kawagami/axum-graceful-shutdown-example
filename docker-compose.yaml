@@ -2,5 +2,7 @@ version: '3'
 services:
   tempbuild:
     image: tempbuild
+    environment:
+      - JWT_SECRET=secreteafsdf
     ports:
       - "3000:3000"

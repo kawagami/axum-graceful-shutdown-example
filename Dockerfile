@@ -1,21 +1,16 @@
 FROM rust:1.74.0-slim-bookworm AS builder
 
-RUN rustup target add x86_64-unknown-linux-musl
-
 WORKDIR /app
 
 COPY src/ src/
 COPY Cargo.toml .
 
-RUN cargo build --target x86_64-unknown-linux-musl --release
+RUN cargo build --release
 
-RUN strip -s /app/target/x86_64-unknown-linux-musl/release/testsomething
+RUN strip -s /app/target/release/testsomething
 
-# 修復 scratch 找不到檔案的問題
-# https://kerkour.com/rust-small-docker-image#from-scratch
-# 以上網址有說原因
-FROM scratch
+FROM ubuntu:22.04
 
-COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/testsomething /app/testsomething
+COPY --from=builder /app/target/release/testsomething /app/testsomething
 
 CMD ["/app/testsomething"]

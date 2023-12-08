@@ -17,8 +17,7 @@ use serde_json::json;
 use std::fmt::Display;
 
 pub static KEYS: Lazy<Keys> = Lazy::new(|| {
-    // let secret = std::env::var("JWT_SECRET").expect("JWT_SECRET must be set");
-    let secret = "secret".to_string();
+    let secret = std::env::var("JWT_SECRET").expect("JWT_SECRET must be set");
     Keys::new(secret.as_bytes())
 });
 
