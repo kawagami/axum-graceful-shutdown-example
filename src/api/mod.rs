@@ -1,3 +1,4 @@
+mod structs;
 mod v0;
 
 use axum::Router;
