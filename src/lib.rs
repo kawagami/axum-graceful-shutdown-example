@@ -1,14 +1,14 @@
 mod api;
-
-use std::time::Duration;
+mod routes;
 
 use axum::{
     extract::Request,
     http::{StatusCode, Uri},
-    Router,
 };
 use hyper::body::Incoming;
 use hyper_util::rt::TokioIo;
+use routes::create_routes;
+use std::time::Duration;
 use tokio::net::TcpListener;
 use tokio::signal;
 use tokio::sync::watch;
@@ -29,7 +29,7 @@ pub async fn run() {
         .init();
 
     // Create a regular axum app.
-    let app = Router::new().merge(api::app()).fallback(fallback).layer((
+    let app = create_routes().fallback(fallback).layer((
         TraceLayer::new_for_http(),
         // Graceful shutdown will wait for outstanding requests to complete. Add a timeout so
         // requests don't hang forever.
