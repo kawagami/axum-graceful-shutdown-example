@@ -4,18 +4,28 @@ mod mirror_body_string;
 mod mirror_user_agent;
 mod path_variables;
 mod query_params;
+mod shared_data;
 
 use axum::{
     http::Method,
     routing::{get, post},
-    Router,
+    Extension, Router,
 };
 use tower_http::cors::{Any, CorsLayer};
+
+#[derive(Clone)]
+pub struct SharedData {
+    message: String,
+}
 
 pub fn create_routes() -> Router {
     let cors = CorsLayer::new()
         .allow_methods([Method::GET, Method::POST])
         .allow_origin(Any);
+
+    let shared_data = SharedData {
+        message: "shared data in middleware".to_owned(),
+    };
 
     Router::new()
         .route("/", get(index::get_handler).post(index::post_handler))
@@ -24,5 +34,7 @@ pub fn create_routes() -> Router {
         .route("/path_variables/:id", post(path_variables::post_handler))
         .route("/query_params", get(query_params::get_handler))
         .route("/mirror_user_agent", post(mirror_user_agent::post_handler))
+        .route("/shared_data", get(shared_data::get_handler))
+        .layer(Extension(shared_data))
         .layer(cors)
 }
