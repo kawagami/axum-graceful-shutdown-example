@@ -6,12 +6,17 @@ mod path_variables;
 mod query_params;
 
 use axum::{
+    http::Method,
     routing::{get, post},
     Router,
 };
+use tower_http::cors::{Any, CorsLayer};
 
 pub fn create_routes() -> Router {
-    // Router::new().merge(api::app())
+    let cors = CorsLayer::new()
+        .allow_methods([Method::GET, Method::POST])
+        .allow_origin(Any);
+
     Router::new()
         .route("/", get(index::get_handler).post(index::post_handler))
         .route("/mirror_body_string", get(mirror_body_string::get_handler))
@@ -19,4 +24,5 @@ pub fn create_routes() -> Router {
         .route("/path_variables/:id", post(path_variables::post_handler))
         .route("/query_params", get(query_params::get_handler))
         .route("/mirror_user_agent", post(mirror_user_agent::post_handler))
+        .layer(cors)
 }
