@@ -1,14 +1,12 @@
-mod api;
-
-use std::time::Duration;
-
 use axum::{
     extract::Request,
     http::{StatusCode, Uri},
+    routing::get,
     Router,
 };
 use hyper::body::Incoming;
 use hyper_util::rt::TokioIo;
+use std::time::Duration;
 use tokio::net::TcpListener;
 use tokio::signal;
 use tokio::sync::watch;
@@ -30,12 +28,15 @@ async fn main() {
         .init();
 
     // Create a regular axum app.
-    let app = Router::new().merge(api::app()).fallback(fallback).layer((
-        TraceLayer::new_for_http(),
-        // Graceful shutdown will wait for outstanding requests to complete. Add a timeout so
-        // requests don't hang forever.
-        TimeoutLayer::new(Duration::from_secs(10)),
-    ));
+    let app = Router::new()
+        .route("/", get(|| async {}))
+        .fallback(fallback)
+        .layer((
+            TraceLayer::new_for_http(),
+            // Graceful shutdown will wait for outstanding requests to complete. Add a timeout so
+            // requests don't hang forever.
+            TimeoutLayer::new(Duration::from_secs(10)),
+        ));
 
     // Create a `TcpListener` using tokio.
     let listener = TcpListener::bind("0.0.0.0:3000").await.unwrap();
