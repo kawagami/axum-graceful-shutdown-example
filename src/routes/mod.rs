@@ -10,6 +10,7 @@ mod read_middleware_custom_header;
 mod returns_201;
 mod set_middleware_custom_header;
 mod shared_data;
+mod validate_with_serde;
 
 use axum::{
     http::Method,
@@ -53,4 +54,8 @@ pub fn create_routes() -> Router {
         .route("/always_errors", get(always_errors::always_errors))
         .route("/returns_201", post(returns_201::returns_201))
         .route("/get_json", get(get_json::get_json))
+        .route(
+            "/validate_with_serde",
+            post(validate_with_serde::validate_with_serde),
+        )
 }
