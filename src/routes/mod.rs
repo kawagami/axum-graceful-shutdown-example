@@ -1,3 +1,4 @@
+mod always_errors;
 mod index;
 mod mirror_body_json;
 mod mirror_body_string;
@@ -5,9 +6,9 @@ mod mirror_user_agent;
 mod path_variables;
 mod query_params;
 mod read_middleware_custom_header;
+mod returns_201;
 mod set_middleware_custom_header;
 mod shared_data;
-mod always_errors;
 
 use axum::{
     http::Method,
@@ -49,4 +50,5 @@ pub fn create_routes() -> Router {
         .layer(Extension(shared_data))
         .layer(cors)
         .route("/always_errors", get(always_errors::always_errors))
+        .route("/returns_201", post(returns_201::returns_201))
 }
