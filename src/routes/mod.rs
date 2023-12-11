@@ -7,6 +7,7 @@ mod query_params;
 mod read_middleware_custom_header;
 mod set_middleware_custom_header;
 mod shared_data;
+mod always_errors;
 
 use axum::{
     http::Method,
@@ -47,4 +48,5 @@ pub fn create_routes() -> Router {
         .route("/shared_data", get(shared_data::get_handler))
         .layer(Extension(shared_data))
         .layer(cors)
+        .route("/always_errors", get(always_errors::always_errors))
 }
