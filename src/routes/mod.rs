@@ -1,4 +1,5 @@
 mod always_errors;
+mod get_json;
 mod index;
 mod mirror_body_json;
 mod mirror_body_string;
@@ -51,4 +52,5 @@ pub fn create_routes() -> Router {
         .layer(cors)
         .route("/always_errors", get(always_errors::always_errors))
         .route("/returns_201", post(returns_201::returns_201))
+        .route("/get_json", get(get_json::get_json))
 }
