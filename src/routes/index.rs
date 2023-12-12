@@ -1,16 +1,17 @@
 use sqlx::{Connection, Row};
 
 pub async fn index() -> String {
-    // let url = "postgresql://kawa:kawa@localhost:5432/kawa";
-    let url = "postgresql://kawa:kawa@database:5432/kawa";
+    let url = "postgresql://kawa:kawa@localhost:5432/kawa";
+    // let url = "postgresql://kawa:kawa@database:5432/kawa";
     let mut conn = sqlx::postgres::PgConnection::connect(url).await.unwrap();
 
-    let res = sqlx::query("SELECT 1 + 1 as sum")
-        .fetch_one(&mut conn)
-        .await
-        .unwrap();
+    let query = "select * from users where id=1";
 
-    let sum: i32 = res.get("sum");
+    // let res = sqlx::query("SELECT 1 + 1 as sum")
+    let res = sqlx::query(query).fetch_one(&mut conn).await.unwrap();
 
-    format!("{}", sum)
+    // let sum: i32 = res.get("sum");
+    let username: String = res.get("username");
+
+    format!("{}", username)
 }
