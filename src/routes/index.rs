@@ -1,9 +1,12 @@
 use sqlx::{Connection, Row};
 
 pub async fn index() -> String {
-    let url = "postgresql://kawa:kawa@localhost:5432/kawa";
+    dotenvy::dotenv().ok();
+
+    let url = std::env::var("DATABASE_URL").expect("Missing env DATABASE_URL");
+    // let url = "postgresql://kawa:kawa@localhost:5432/kawa";
     // let url = "postgresql://kawa:kawa@database:5432/kawa";
-    let mut conn = sqlx::postgres::PgConnection::connect(url).await.unwrap();
+    let mut conn = sqlx::postgres::PgConnection::connect(&url).await.unwrap();
 
     let query = "select * from users where id=1";
 
